@@ -1,0 +1,127 @@
+#git学习文档
+	#绑定机器与账号
+		git config --global user.name "chundonghan"
+		git config --global user.email "chundonghan@163.com"
+	#创建版本库
+		使目录变为仓库
+			git init
+		把文件添加到暂存区
+			git add file1 [file2 file3...]
+		把上一次添加到暂存区的文件提交到仓库
+			git commit -m "comment"
+		查看仓库当前状态
+			git status
+		查看修改内容
+			git diff
+		查看提交历史
+			git log [--pretty=oneline]
+		查看命令历史
+			git reflog
+	#版本回退
+		git reset --hard HEAD^
+		git reset --hard commit_id
+	#工作区与暂存区
+		┌───Work Directory───┐         ┌────────────────Repository────────────────┐
+		│					 │         │   ┌───stage───┐          ┌───branch──┐   │        
+		│	              	─│── add ──│──>│		   │          │           │   │
+		│				     │         │   │          ─│──commit──│─>         │   │
+		│                    │         │   └───────────┘          └───────────┘   │
+		└────────────────────┘		   └──────────────────────────────────────────┘
+		#git add命令实际上就是把要提交的所有修改放到暂存区（Stage），然后，执行git commit就可以一次性把暂存区的所有修改提交到分支
+	#撤销修改
+		git checkout -- file #用版本库里的版本替换工作区的版本，无论工作区是修改还是删除
+		git reset HEAD file   #可以把暂存区的修改撤销掉（unstage），重新放回工作区
+	#删除文件
+		git rm file
+		git commit -m "comment"
+	#远程仓库
+		#添加到远程仓库
+			首先需要在github上创建一个仓库
+			git remote add origin https://github.com/chundonghan/my_python_project.git   #本地仓库与远程库关联
+			git push -u origin master # 推送到远程仓库
+			git push origin master #后续推送
+		#从远程仓库克隆
+			git clone https://github.com/chundonghan/my_python_project.git
+	#分支管理
+		#创建并切换分支
+			git checkout -b dev
+		#等同于
+			git branch dev
+			git checkout dev  #切换分支
+		#查看当前分支
+			git branch
+		#分支合并
+			首先在dev分支上提交
+			切换master分支
+			#master合并dev
+				git merge dev
+		#删除分支
+			git branch -d dev
+	#冲突conflict
+		┌────────────────────────────┐
+		│	<<<<<<< HEAD             │
+		│	dev said sth to me       │
+		│	=======                  │
+		│	dev said sth to master   │
+		│	                         │
+		│	>>>>>>> dev              │
+		└────────────────────────────┘		
+		dev分支与master分支对同一行进行修改并提交，在分支合并时引起冲突
+		修改文件保留所需内容再次提交
+		#查看分支合并情况
+			git log --graph --pretty=oneline --abbrev-commit
+	#分支管理策略
+		git merge --no-ff -m "comment" dev  #禁用fast forward 即删除分支后，会丢掉分支信息
+		#原则：
+			master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活
+			干活都在dev分支上
+			每个人都有自己的分支，是不是往dev合并
+			Ο──────────────Ο────────Ο------master
+			 ＼          ／       ／
+			   Ο────────Ο─────Ο──Ο-------dev
+                ＼    ／    ／
+		          Ο──Ο─────Ο--------handch
+	#bug分支
+		#保存工作现场
+			git stash
+		#现场列表
+			git stash list
+		#恢复现场
+			git stash pop
+			#多次stash
+				git stash apply stash@{0}
+				git stash drop stash@{0}
+	#feature分支
+		#强行删除分支
+			git branch -D feature-branch
+	#多人协作
+		#查看远程库的信息
+			git remote [-v] # -v 详细信息
+		#从本地推送分支
+			git push origin dev
+		#建立本地分支和远程分支的关联
+			git branch --set-upstream-to=origin/dev dev
+		#抓取远程的新提交
+			git pull
+	#Rebase
+		整理分支
+	#标签
+	    git tag tagname
+		#查看标签
+			git tag
+		#为提交添加标签
+			git tag  tagname commit_id
+		#查看标签信息
+			git show tagname
+		#创建带有说明的标签
+			git tag -a tagname -m "comment" commit_id
+		#删除标签
+			git tag -d tagname
+		#推送一个本地标签
+			git push origin tagname
+		#推送全部未推送过的本地标签
+			git push origin --tags
+		#删除远程标签
+			git push origin :refs/tags/<tagname>
+		
+				 
