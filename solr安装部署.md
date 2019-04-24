@@ -29,8 +29,8 @@
 	> 2. 将mysql驱动jar包拷贝到$SOLR_HOME/server/solr-webapp/webapp/WEB-INF/lib/中
 	> 3. 配置连接信息  
 	>  vi $SOLR_HOME/new_core/conf/solrconfig.xml  
-	>  查找`<!-- SearchHandler`注释,在其下方添加如下配置内容
-		> &lt;requestHandler name="/dataimport" class="solr.DataImportHandler"&gt;  
+	>  查找`<!-- SearchHandler`注释,在其下方添加如下配置内容  
+		&lt;requestHandler name="/dataimport" class="solr.DataImportHandler"&gt;  
 		&nbsp;&nbsp;&nbsp;&nbsp;&lt;lst name="defaults"&gt;  
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;str name="config"&gt;data-config.xml&lt;/str&gt;  
 		&nbsp;&nbsp;&nbsp;&nbsp;&lt;/lst&gt;  
@@ -39,26 +39,26 @@
 	> 4. 创建data-config.xml  
 	> 在new_core/conf目录下创建data-config.xml  
 		> `<?xml version="1.0" encoding="UTF-8"?>
-<dataConfig>
-	<dataSource
-		type="JdbcDataSource"
-		driver="com.mysql.cj.jdbc.Driver" 
-		url="jdbc:mysql://localhost:3306/solr?serverTimezone=UTC"
-		user="root"
-		password="root" /> 
-    <document>
-        <entity name="geo" query="select * from geo_code">
-            <field column="id" name="id" />
-            <field column="address" name="address" />
-            <field column="filter" name="filter" />
-        </entity>
-    </document>
-</dataConfig>`
+			<dataConfig>
+				<dataSource
+					type="JdbcDataSource"
+					driver="com.mysql.cj.jdbc.Driver" 
+					url="jdbc:mysql://localhost:3306/solr?serverTimezone=UTC"
+					user="root"
+					password="root" /> 
+			    <document>
+			        <entity name="geo" query="select * from geo_code">
+			            <field column="id" name="id" />
+			            <field column="address" name="address" />
+			            <field column="filter" name="filter" />
+			        </entity>
+			    </document>
+			</dataConfig>`  
 	> 5. 导入solr库  
-	> 把`<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-dataimporthandler-\d.*\.jar" />`加在`<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />`前面
+	> 把`<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-dataimporthandler-\d.*\.jar" />`加在`<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />`前面  
 	> 6. 添加field  
-	> 在页面左侧core下拉选项中选中`new_core`,点击`Schema`菜单,右侧点击`Add Field`按钮,name与数据库实体中field的name相对应,field type根据实际情况选择
+	> 在页面左侧core下拉选项中选中`new_core`,点击`Schema`菜单,右侧点击`Add Field`按钮,name与数据库实体中field的name相对应,field type根据实际情况选择  
 	> 7. 导入mysql中数据  
-	> 在选中`new_core`之后点击左侧`Dataimport`菜单,右侧页面根据实际情况勾选选项,选择一个实体如`geo`点击`Execute`执行导入索引
+	> 在选中`new_core`之后点击左侧`Dataimport`菜单,右侧页面根据实际情况勾选选项,选择一个实体如`geo`点击`Execute`执行导入索引  
 	> 8. 查看导入的索引  
-	> 点击左侧`Query`菜单,右侧点击`Execute Query`按钮执行默认查询,查询内容将以json的形式展示在右侧空白处
+	> 点击左侧`Query`菜单,右侧点击`Execute Query`按钮执行默认查询,查询内容将以json的形式展示在右侧空白处  
