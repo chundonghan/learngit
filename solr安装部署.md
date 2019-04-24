@@ -23,7 +23,7 @@
 6. 创建Core
 	> `mkdir new_core` #solr根目录下创建一个core文件夹  
 	> `cp -R ./server/solr/configsets/_default/conf new_core/` #拷贝配置文件至新core文件夹中  
-	> 登录页面http://ip:8983/solr,点击左侧`Core Admin`菜单,之后在右侧点击`Add Core`按钮,core名称以及目录与创建的core文件夹名称相对应  
+	> 登录页面`http://ip:8983/solr`,点击左侧`Core Admin`菜单,之后在右侧点击`Add Core`按钮,core名称以及目录与创建的core文件夹名称相对应  
 7. dataimport连接mysql数据库
 	> 1. 下载mysql驱动jar包 
 	> 2. 将mysql驱动jar包拷贝到$SOLR_HOME/server/solr-webapp/webapp/WEB-INF/lib/中
