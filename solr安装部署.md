@@ -38,7 +38,7 @@
 
 	> 4. 创建data-config.xml  
 	> 在new_core/conf目录下创建data-config.xml  
-		> `<?xml version="1.0" encoding="UTF-8"?>
+		`<?xml version="1.0" encoding="UTF-8"?>
 			<dataConfig>
 				<dataSource
 					type="JdbcDataSource"
