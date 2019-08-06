@@ -124,14 +124,54 @@ INNODB还需要维护多版本并发控制（MVCC）一致；虽然你的场景�
 乐观锁：每次去拿数据的时候都认为别人不会修改，所以不会上锁，乐观锁适用于读多写少的应用场景  
 乐观锁实现：多版本并发控制（MVCC），读不加锁写不冲突   
 
+### Redis
+- 数据结构  
+    string list hash set zset  
+- 线程模型  
+    单线程  
+- 持久机制  
+    rdb：定时的持久机制  
+    afo：基于操作日志的持久机制  
+- 事务  
+    事务并不支持回滚  
+- 高可用实现  
+    主从、Sentinel、Cluster  
+- lru数据淘汰机制  
+- 过期策略  
+    定时，惰性，定期
+- 问题  
+    缓存雪崩  
+    缓存击穿  
+
 ### 网络
 #### TCP协议的三次握手和四次挥手过程
 
 ### 框架
+#### Spring 
+- IOC  
+    通过描述来生成或获取对象的技术。在Spring中把每一个需要管理的对象称为Spring Bean，而Spring称之为Spring IOC容器。  
+    IOC包括两方面的内容：一是装配Bean，通过xml配置或扫描注解；二是依赖注入，通常使用注解@Autowired，匹配Bean并注入  
+- AOP  
+    面向切面编程的本质是约定编程，采用代理模式，将方法织入约定的流程中；典型应用有事务处理
+
+#### SpringMVC
+轻量级MVC框架  
+原理：  
+通过DispatchServlet（前端控制器）接受用户的请求，请求HandlerMapping（处理器映射器）查找handler，返回HandlerExecutorChain（处理器执行链），调用HandlerAdapter（处理器适配器）去执行处理器，返回ModelAndView,请求ViewResolver（视图解析器）进行视图解析返回View，对视图进行渲染，向用户响应结果。  
+
+#### Mybatis
+原理：  
+加载mybatis-config.xml配置文件，获取Configuration对象以及一个个MappedStatement对象；  
+SqlSessionFactoryBuilder通过Configuration获取SqlSessionFactory来创建SqlSession；  
+每当调用Mapper接口方法时，创建一个SqlSession对象，通过接口方法名称找到对应Id的MappedStatement对象；  
+再由Executor对象对MappedStatement对象进行解析、sql参数转化、动态sql拼接，生成jdbc Statement对象；  
+最后由JDBC执行sql，结果转换为MappedStatement对象中的结果映射。  
+
 #### @Autowired实现原理
 Spring容器启动时，AutowiredAnnotationBeanPostProcessor扫描Spring容器中的所有Bean，在Bean中发现@Autowired注解，则找到匹配的Bean并注入到对应的地方
 #### Bean的作用域
 默认为singleton  
 还有prototype、request、session、global-session  
+
 
 
