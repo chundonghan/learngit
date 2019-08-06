@@ -23,8 +23,17 @@ HashMap是基于hashing的原理。数据结构由数组和链表（红黑树）
 HashMap会使用键对象的hashcode找到bucket位置，找到bucket位置之后，会调用keys.equals()方法去找到链表中正确的节点，最终找到要找的值对象。  
  - 处理哈希冲突方法：  
 开放地址法（再散列法）  
-拉链法
+拉链法  
 再哈希法  
+
+#### ConcurrentHashMap
+锁分段技术  
+将数据分成一段一段的存储，给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问。  
+有些方法需要跨段，比如size()和containsValue()，它们可能需要锁定整个表而而不仅仅是某个段，这需要按顺序锁定所有段，操作完毕后，又按顺序释放所有段的锁。这里“按顺序”是很重要的，否则极有可能出现死锁。  
+段数组是final的。  
+ConcurrentHashMap是由Segment数组结构和HashEntry数组结构组成。  
+
+
 
 #### BIO、NIO、AIO
 同步：用户进程触发I/O操作并等待或轮询地去查看I/O操作是否就绪  
@@ -41,6 +50,18 @@ I/O操作：
     用户进程发起一个I/O操作以后便可返回做其他事情，但是用户进程需要时不时地询问I/O操作是否就绪，这就要求用户周期性地去询问  
 - AIO 异步非阻塞  
     用户进程发起一个I/O操作以后，不等待内核I/O操作的完成，内核完成I/O操作以后会通知用户进程。  
+
+### 优化
+#### Tomcat优化
+- 禁用AJP连接  
+    用不着AJP协议  
+- 执行器Executor  
+    每一个用户请求都是一个线程，使用线程池提高性能  
+    参数：maxThreads、minSpareThreads、prestartminSpareThreads、maxQueueSize
+- 配置内存
+    CATALINA_OPTS
+- 集群
+    横向扩展
 
 #### Java GC机制
 
@@ -157,7 +178,7 @@ INNODB还需要维护多版本并发控制（MVCC）一致；虽然你的场景�
 #### SpringMVC
 轻量级MVC框架  
 原理：  
-通过DispatchServlet（前端控制器）接受用户的请求，请求HandlerMapping（处理器映射器）查找handler，返回HandlerExecutorChain（处理器执行链），调用HandlerAdapter（处理器适配器）去执行处理器，返回ModelAndView,请求ViewResolver（视图解析器）进行视图解析返回View，对视图进行渲染，向用户响应结果。  
+通过DispatchServlet（前端控制器）接受用户的请求，调用HandlerMapping（处理器映射器）查找handler，返回HandlerExecutorChain（处理器执行链），调用HandlerAdapter（处理器适配器）去执行处理器，返回ModelAndView,调用ViewResolver（视图解析器）进行视图解析返回View，对视图进行渲染，向用户响应结果。  
 
 #### Mybatis
 原理：  
@@ -172,6 +193,12 @@ Spring容器启动时，AutowiredAnnotationBeanPostProcessor扫描Spring容器�
 #### Bean的作用域
 默认为singleton  
 还有prototype、request、session、global-session  
+
+#### 传播行为
+REQUIRED：沿用当前事务  
+REQUIRED_NEW：独立事务  
+NESTED：沿用当前事务，子方法回滚 当前事务不回滚
+
 
 
 
